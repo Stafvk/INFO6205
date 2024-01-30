@@ -38,22 +38,37 @@ public class ThreeSumQuadratic implements ThreeSum {
     public List<Triple> getTriples(int j) {
         List<Triple> triples = new ArrayList<>();
         // TO BE IMPLEMENTED  : for each candidate, test if a[i] + a[j] + a[k] = 0.
+        int leftPointer = j + 1;
+        int rightPointer = length - 1;
 
+        // Use the two-pointer approach to find triplets
+        while (leftPointer < rightPointer) {
+            int sum = a[j] + a[leftPointer] + a[rightPointer];
 
+            if (sum == 0) {
+                triples.add(new Triple(a[j], a[leftPointer], a[rightPointer]));
+                leftPointer++;
+                rightPointer--;
 
+                // Skip duplicates to avoid redundant triplets
+                while (leftPointer < rightPointer && a[leftPointer] == a[leftPointer - 1]) {
+                    leftPointer++;
+                }
+                while (leftPointer < rightPointer && a[rightPointer] == a[rightPointer + 1]) {
+                    rightPointer--;
+                }
+            } else if (sum < 0) {
+                leftPointer++;
+            } else {
+                rightPointer--;
+            }
+        }
 
+        return triples;
 
-
-
-
-
-
-
-
-
-
-throw new RuntimeException("implementation missing");
-    }
+//throw new RuntimeException("implementation missing");
+//
+ }
 
     private final int[] a;
     private final int length;
