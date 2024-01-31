@@ -52,34 +52,29 @@ public class ThreeSumQuadraticWithCalipers implements ThreeSum {
         // TO BE IMPLEMENTED  : use function to qualify triples and to navigate otherwise.
 
 //we take the second element of the array as the left pointer and the last element as the right pointer
+// and the first element is the fixed element in the array
         int left = i + 1;
-        int right = a.length - 1;
+        int right= a.length-1;
 
-        // Use calipers to find triplets
         while (left < right) {
-            int sum = function.apply(new Triple(a[i], a[left], a[right]));
-
+            int sum=a[i]+a[left]+a[right];
             if (sum == 0) {
                 triples.add(new Triple(a[i], a[left], a[right]));
-
-                // Move both pointers inwards to explore other triplets
                 left++;
                 right--;
 
-                // Skip duplicates
-                while (left < right && a[left] == a[left - 1]) {
+                while (left < right && a[left] == a[left - 1])
                     left++;
-                }
-                while (left < right && a[right] == a[right + 1]) {
+                while (left < right && a[right] == a[right + 1])
                     right--;
-                }
-            } else if (sum < 0) {
-                left++; // Increase sum by moving left pointer
-            } else {
-                right--; // Decrease sum by moving right pointer
+            }
+            else if (sum < 0) {
+                left++;
+            }
+            else {
+                right--;
             }
         }
-
         return triples;
 //throw new RuntimeException("implementation missing");
 //    }

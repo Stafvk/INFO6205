@@ -36,33 +36,38 @@ public class ThreeSumQuadratic implements ThreeSum {
      * @return a Triple such that
      */
     public List<Triple> getTriples(int j) {
+
         List<Triple> triples = new ArrayList<>();
         // TO BE IMPLEMENTED  : for each candidate, test if a[i] + a[j] + a[k] = 0.
-        int leftPointer = j + 1;
+
+
+        int leftPointer = 0;
         int rightPointer = length - 1;
-
+if(leftPointer == rightPointer){
+    if (a[j]+a[j-1]+a[j+1]==0){
+        triples.add(new Triple(a[j], a[leftPointer], a[rightPointer]));
+    }
+}
         // Use the two-pointer approach to find triplets
-        while (leftPointer < rightPointer) {
-            int sum = a[j] + a[leftPointer] + a[rightPointer];
-
+        while (leftPointer < j && rightPointer > j) {
+            int sum=a[leftPointer]+a[j]+a[rightPointer];
             if (sum == 0) {
-                triples.add(new Triple(a[j], a[leftPointer], a[rightPointer]));
+                triples.add(new Triple(a[leftPointer], a[j], a[rightPointer]));
                 leftPointer++;
                 rightPointer--;
-
-                // Skip duplicates to avoid redundant triplets
-                while (leftPointer < rightPointer && a[leftPointer] == a[leftPointer - 1]) {
-                    leftPointer++;
-                }
-                while (leftPointer < rightPointer && a[rightPointer] == a[rightPointer + 1]) {
-                    rightPointer--;
-                }
-            } else if (sum < 0) {
+                    while (leftPointer < j && a[leftPointer] == a[leftPointer - 1])
+                        leftPointer++;
+                    while (rightPointer > j && a[rightPointer] == a[rightPointer + 1])
+                      rightPointer--;
+            }
+            else if (sum < 0) {
                 leftPointer++;
-            } else {
+            }
+            else {
                 rightPointer--;
             }
         }
+
 
         return triples;
 

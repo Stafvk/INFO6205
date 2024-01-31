@@ -61,6 +61,42 @@ public class ThreeSumTest {
         System.out.println(Arrays.toString(triples2));
         assertEquals(4, triples2.length);
     }
+    @Test
+    public void testToGenerateOutput() {
+            int initialSize = 10; // Starting size
+            for (int i = 0; i < 5; i++) { // Run 5 tests, doubling the size each time
+                int currentSize = initialSize * (int) Math.pow(2, i);
+                Supplier<int[]> intsSupplier = new Source(currentSize, 20, 2L).intsSupplier(10);
+                int[] ints = intsSupplier.get();
+                //System.out.println("Current Array: " + Arrays.toString(ints));
+                // ThreeSumQuadratic
+                ThreeSum quadraticSum = new ThreeSumQuadratic(ints);
+                //start timer
+                Triple[] triplesQuadratic = quadraticSum.getTriples();
+            
+                System.out.println("Quadratic - Array Size: " + currentSize + ", Triples Count: " + triplesQuadratic.length);
+//stop timer
+            //Quadratic
+                ThreeSum quadraticCalipersSum = new ThreeSumQuadraticWithCalipers(ints);
+            //start timer
+                Triple[] triplesQuadraticCalipers = quadraticCalipersSum.getTriples();
+       
+                System.out.println("Quadratic Calipers - Array Size: " + currentSize + ", Triples Count: " + triplesQuadraticCalipers.length);
+//stop timer
+                //ThreeSumCubic
+                ThreeSum cubicSum = new ThreeSumCubic(ints);
+          //start timer
+                Triple[] triplesCubic = cubicSum.getTriples();
+                System.out.println("Cubic - Array Size: " + currentSize + ", Triples Count: " + triplesCubic.length);
+              //stop timer
+                // ThreeSumQuadrithmic
+                ThreeSum ThreeSumQuadrithmic = new ThreeSumQuadrithmic(ints);
+                //start timer
+                Triple[] triplesQuadrithmic = ThreeSumQuadrithmic.getTriples();
+                //stop timer
+                System.out.println("Quadrithmic - Array Size: " + currentSize + ", Triples Count: " + triplesQuadrithmic.length);
+            }
+    }
 
     @Test
     public void testGetTriples2() {
