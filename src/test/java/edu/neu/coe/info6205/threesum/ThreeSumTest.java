@@ -63,10 +63,10 @@ public class ThreeSumTest {
     }
     @Test
     public void testToGenerateOutput() {
-            int initialSize = 10; // Starting size
+            int initialSize = 200; // Starting size
             for (int i = 0; i < 5; i++) { // Run 5 tests, doubling the size each time
                 int currentSize = initialSize * (int) Math.pow(2, i);
-                Supplier<int[]> intsSupplier = new Source(currentSize, 20, 2L).intsSupplier(10);
+                Supplier<int[]> intsSupplier = new Source(currentSize, 20, 1L).intsSupplier(10);
                 int[] ints = intsSupplier.get();
                 //System.out.println("Current Array: " + Arrays.toString(ints));
                 // ThreeSumQuadratic

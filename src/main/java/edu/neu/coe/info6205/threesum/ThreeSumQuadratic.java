@@ -43,11 +43,7 @@ public class ThreeSumQuadratic implements ThreeSum {
 
         int leftPointer = 0;
         int rightPointer = length - 1;
-if(leftPointer == rightPointer){
-    if (a[j]+a[j-1]+a[j+1]==0){
-        triples.add(new Triple(a[j], a[leftPointer], a[rightPointer]));
-    }
-}
+
         // Use the two-pointer approach to find triplets
         while (leftPointer < j && rightPointer > j) {
             int sum=a[leftPointer]+a[j]+a[rightPointer];
