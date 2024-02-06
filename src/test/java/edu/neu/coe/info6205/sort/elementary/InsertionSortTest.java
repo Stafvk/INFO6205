@@ -12,15 +12,20 @@ import edu.neu.coe.info6205.util.StatPack;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("ALL")
 public class InsertionSortTest {
-
+    public enum ArrayOrdering {
+        RANDOM,
+        ORDERED,
+        PARTIALLY_ORDERED,
+        REVERSE_ORDERED
+    }
     @Test
     public void sort0() throws Exception {
         final List<Integer> list = new ArrayList<>();
@@ -74,6 +79,7 @@ public class InsertionSortTest {
         GenericSort<Integer> sorter = new InsertionSort<Integer>(helper);
         sorter.mutatingSort(xs);
         assertTrue(helper.sorted(xs));
+
     }
 
     @Test
@@ -139,6 +145,80 @@ public class InsertionSortTest {
         assertEquals(inversions, fixes);
     }
 
+        @Test
+        public void runBenchmarks() {
+            int[] arraySizes = {100, 200, 400, 800, 1600};
+            ArrayOrdering[] orderings =
+                    {ArrayOrdering.RANDOM, ArrayOrdering.ORDERED, ArrayOrdering.PARTIALLY_ORDERED, ArrayOrdering.REVERSE_ORDERED};
+            for(int size:arraySizes){
+                for(ArrayOrdering ordering:orderings){
+                    runBenchmark(size,ordering);
+                }
+            }
+
+        }
+        private void runBenchmark(int size, ArrayOrdering arrayOrdering) {
+            System.out.format("Running Benchmark: Array Size: %d, Ordering: %s%n", size, arrayOrdering);
+
+
+            Integer[] array = generateArray(size, arrayOrdering);
+
+            // Warm-up
+            for (int warmUp = 0; warmUp < 10; warmUp++) {
+                InsertionSort.sort(Arrays.copyOf(array, array.length));
+            }
+
+            // Measure the actual sorting time
+            long startTime = System.nanoTime();
+            InsertionSort.sort(Arrays.copyOf(array, array.length));
+            long endTime = System.nanoTime();
+
+            long elapsedTime = endTime - startTime;
+System.out.println("Timetaken:"+ elapsedTime+"nanoseconds");
+        }
+    private Integer[] generateArray(int size, ArrayOrdering arrayOrdering) {
+        Integer[] array = new Integer[size];
+            switch(arrayOrdering){
+            case RANDOM:
+                array=IntStream.range(0,size).boxed().toArray(Integer[]::new);
+                shuffleArray(array);
+                break;
+            case ORDERED:
+                array = IntStream.range(0, size).boxed().toArray(Integer[]::new);
+                break;
+            case PARTIALLY_ORDERED:
+                array = IntStream.range(0, size).boxed().toArray(Integer[]::new);
+                shuffleArrayPortion(array, size / 4); // Shuffle a portion of the array
+                break;
+            case REVERSE_ORDERED:
+                array = IntStream.range(0, size).boxed().sorted(Comparator.reverseOrder()).toArray(Integer[]::new);
+                break;
+        }
+
+        return array;
+    }
+
+    private void shuffleArray(Integer[] array) {
+        Random random = new Random();
+        for (int i = array.length - 1; i > 0; i--) {
+            int index = random.nextInt(i + 1);
+            int temp=array[index];
+            array[index]=array[i];
+            array[i]=temp;
+        }
+    }
+
+    private void shuffleArrayPortion(Integer[] array, int portionSize) {
+        Random random = new Random();
+        for (int i = 0; i < portionSize; i++) {
+            int index1 = random.nextInt(array.length);
+            int index2 = random.nextInt(array.length);
+
+            int temp = array[index2];
+            array[index2] = array[index1];
+            array[index1] = temp;
+        }
+    }
     final static LazyLogger logger = new LazyLogger(InsertionSort.class);
 
 }

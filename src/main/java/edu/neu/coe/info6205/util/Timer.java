@@ -31,7 +31,11 @@ public class Timer {
         resume();
         return result;
     }
-
+    public void reset() {
+        ticks = 0L;
+        laps = 0;
+        running = false;
+    }
     /**
      * Run the given functions n times, once per "lap" and then return the mean lap time.
      *
@@ -61,33 +65,39 @@ public class Timer {
      */
     public <T, U> double repeat(int n, boolean warmup, Supplier<T> supplier, Function<T, U> function, UnaryOperator<T> preFunction, Consumer<U> postFunction) {
         // TO BE IMPLEMENTED : note that the timer is running when this method is called and should still be running when it returns.
+        reset();
+        if (running) {
+            throw new TimerException("Timer is already running.");
+        }
 
+        long total = 0;
 
+        for (int i = 0; i < n; i++) {
+            if (preFunction != null) {
+                supplier.get();
+                preFunction.apply(supplier.get());
+            }
 
+            long startTime = getClock();
+            function.apply(supplier.get());
 
+            if(postFunction!= null){
+                postFunction.accept((function.apply(supplier.get())));
+            }
 
+            long endTime = getClock();
+            total += endTime - startTime;
+            if (!running) {
+                resume();
+            }
+            lap();
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // SKELETON
-         return 0;
+        if (!warmup) {
+            return toMillisecs(total) / n;
+        } else {
+            return 0;
+        }
         // END SOLUTION
     }
 
@@ -214,9 +224,8 @@ public class Timer {
      */
     private static long getClock() {
         // TO BE IMPLEMENTED 
-
+        return System.nanoTime();
         // SKELETON
-         return 0;
         // END SOLUTION
     }
 
@@ -231,7 +240,7 @@ public class Timer {
         // TO BE IMPLEMENTED 
 
         // SKELETON
-         return 0;
+        return (double) ticks / 1_000_000;
         // END SOLUTION
     }
 
