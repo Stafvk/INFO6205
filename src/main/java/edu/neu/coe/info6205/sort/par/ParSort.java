@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
  */
 class ParSort {
 
-    public static int cutoff = 1000;
+    public static int cutoff = 25000;
 
     public static void sort(int[] array, int from, int to) {
         if (to - from < cutoff) Arrays.sort(array, from, to);

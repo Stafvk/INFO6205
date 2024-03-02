@@ -18,9 +18,16 @@ public class Main {
 
     public static void main(String[] args) {
         processArgs(args);
-        System.out.println("Degree of parallelism: " + ForkJoinPool.getCommonPoolParallelism());
+//        System.out.println("Degree of parallelism: " + ForkJoinPool.getCommonPoolParallelism());
+        int degreeOfParallelism = 16; // Set the desired parallelism level
+
+        // Set the parallelism level using system property
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", String.valueOf(degreeOfParallelism));
+
+        System.out.println("Degree of parallelism: " + degreeOfParallelism);
+//        System.out.println("Degree of parallelism: " + ForkJoinPool.getCommonPoolParallelism());
         Random random = new Random();
-        int[] array = new int[2000000];
+        int[] array = new int[500000];
         ArrayList<Long> timeList = new ArrayList<>();
         for (int j = 50; j < 100; j++) {
             ParSort.cutoff = 10000 * (j + 1);
